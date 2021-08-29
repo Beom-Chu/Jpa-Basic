@@ -1,13 +1,14 @@
-package com.kbs.jpabasic;
+package com.kbs.datajpa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JpaBasicApplicationTests {
+class SrpingDataJpaApplicationTests {
 
 	@Test
 	void contextLoads() {
+	  System.out.println("test");
 	}
 
 }
