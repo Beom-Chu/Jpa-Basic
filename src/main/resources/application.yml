@@ -1,17 +1,19 @@
+
 spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/datajpa
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
   jpa:
     hibernate:
       ddl-auto: create
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
 
-  h2:
-    console:
-      enabled: true
-      path: /h2_db
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+#logging.level:
+#  org.hibernate.SQL: debug
+#  org.hibernate.type: trace
