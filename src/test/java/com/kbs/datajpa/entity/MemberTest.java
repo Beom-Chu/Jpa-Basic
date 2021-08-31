@@ -17,7 +17,6 @@ class MemberTest {
   EntityManager em;
   
   @Test
-
   void testEntity() {
     
     Team teamA = new Team("teamA");
@@ -39,7 +38,7 @@ class MemberTest {
     em.flush();
     em.clear();
     
-    List<Member> members = em.createQuery("select m from Memeber m",Member.class).getResultList();
+    List<Member> members = em.createQuery("select m from Member m",Member.class).getResultList();
     
     for(Member member : members) {
       System.out.println("[[[member : " + member);
