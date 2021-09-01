@@ -11,7 +11,7 @@ import com.kbs.datajpa.entity.Member;
 
 @SpringBootTest
 @Transactional
-@Rollback(false)
+//@Rollback(false)
 class MemberRepositoryTest {
 
   @Autowired
@@ -55,6 +55,23 @@ class MemberRepositoryTest {
     
     long deletedCount = memberRepository.count();
     assertThat(deletedCount).isEqualTo(0);
+    
+  }
+  
+  @Test
+  public void findByUserNameAndAgeGreaterThan() {
+    
+    Member m1 = new Member("AAA",10);
+    Member m2 = new Member("AAA",20);
+    
+    memberRepository.save(m1);
+    memberRepository.save(m2);
+    
+    List<Member> result = memberRepository.findByUserNameAndAgeGreaterThan("AAA", 15);
+    
+    assertThat(result.get(0).getUserName()).isEqualTo("AAA");
+    assertThat(result.get(0).getAge()).isEqualTo(20);
+    assertThat(result.size()).isEqualTo(1);
     
   }
 }

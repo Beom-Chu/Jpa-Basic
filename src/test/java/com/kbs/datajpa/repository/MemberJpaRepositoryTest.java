@@ -11,7 +11,7 @@ import com.kbs.datajpa.entity.Member;
 
 @SpringBootTest
 @Transactional // 테스트에서 @Transactional 사용시 테스트 후 DB 롤백 처리됨 [롤백되지 않게 하려면 @Rollback(false) 사용]
-@Rollback(false)
+//@Rollback(false)
 class MemberJpaRepositoryTest {
 
   @Autowired
@@ -55,6 +55,23 @@ class MemberJpaRepositoryTest {
     
     long deletedCount = memberJpaRepository.count();
     assertThat(deletedCount).isEqualTo(0);
+    
+  }
+  
+  @Test
+  public void findByUserNameAndAgeGreaterThan() {
+    
+    Member m1 = new Member("AAA",10);
+    Member m2 = new Member("AAA",20);
+    
+    memberJpaRepository.save(m1);
+    memberJpaRepository.save(m2);
+    
+    List<Member> result = memberJpaRepository.findByUserNameAndAgeGreaterThan("AAA", 15);
+    
+    assertThat(result.get(0).getUserName()).isEqualTo("AAA");
+    assertThat(result.get(0).getAge()).isEqualTo(20);
+    assertThat(result.size()).isEqualTo(1);
     
   }
 }
