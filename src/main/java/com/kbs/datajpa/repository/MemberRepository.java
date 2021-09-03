@@ -1,6 +1,7 @@
 package com.kbs.datajpa.repository;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,14 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
   
   @Query("select m from Member m where m.userName in :names")
   List<Member> findByNames(@Param("names") List<String> names);
+  
+  
+  // 반환 타입별 조회
+  // 컬렉션
+  List<Member> findListByUserName(String name);
+  //단건
+  Member findOneByUserName(String name);
+  //단건 Optional
+  Optional<Member> findOptionalByUserName(String name);
+  
 }
