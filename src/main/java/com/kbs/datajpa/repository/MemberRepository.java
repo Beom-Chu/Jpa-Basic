@@ -2,6 +2,10 @@ package com.kbs.datajpa.repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +40,12 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
   //단건 Optional
   Optional<Member> findOptionalByUserName(String name);
   
+  
+  //페이정과 정렬
+  Page<Member> findPageByUserName(String name, Pageable pageable);  //count 쿼리 사용
+  Slice<Member> findSliceByUserName(String name, Pageable pageable);  //count 쿼리 미사용 : 내부적으로 limit+1 조회 (조회 후 더보기 로 활용)
+  List<Member> findPageListByUserName(String name, Pageable pageable);  //count 쿼리 미사용
+  List<Member> findSortByUserName(String name, Sort sort);
+  
+  Page<Member> findByAge(int age, Pageable pageable);
 }
