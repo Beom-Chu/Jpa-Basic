@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.kbs.datajpa.dto.MemberDto;
@@ -35,17 +36,31 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
   // 반환 타입별 조회
   // 컬렉션
   List<Member> findListByUserName(String name);
-  //단건
+
+  // 단건
   Member findOneByUserName(String name);
-  //단건 Optional
+
+  // 단건 Optional
   Optional<Member> findOptionalByUserName(String name);
+
+
   
-  
-  //페이정과 정렬
-  Page<Member> findPageByUserName(String name, Pageable pageable);  //count 쿼리 사용
-  Slice<Member> findSliceByUserName(String name, Pageable pageable);  //count 쿼리 미사용 : 내부적으로 limit+1 조회 (조회 후 더보기 로 활용)
-  List<Member> findPageListByUserName(String name, Pageable pageable);  //count 쿼리 미사용
+  // 페이정과 정렬
+  Page<Member> findPageByUserName(String name, Pageable pageable); // count 쿼리 사용
+
+  Slice<Member> findSliceByUserName(String name, Pageable pageable); // count 쿼리 미사용 : 내부적으로 limit+1 조회 (조회 후 더보기 로 활용)
+
+  List<Member> findPageListByUserName(String name, Pageable pageable); // count 쿼리 미사용
+
   List<Member> findSortByUserName(String name, Sort sort);
-  
+
   Page<Member> findByAge(int age, Pageable pageable);
+
+
+  
+  // 벌크성 수정 쿼리
+  @Modifying // @Modifying 수정,삭제 쿼리에 필수
+//  @Modifying(clearAutomatically = true) // 쿼리 실행 후 영속성 컨텍스트 자동 초기화
+  @Query("update Member m set m.age = m.age+1 where m.age >= :age")
+  int bulkAgePlus(@Param("age") int age);
 }
