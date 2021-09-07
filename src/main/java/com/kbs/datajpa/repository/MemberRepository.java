@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,6 +32,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
   
   @Query("select m from Member m where m.userName in :names")
   List<Member> findByNames(@Param("names") List<String> names);
+  
   
   
   // 반환 타입별 조회
@@ -63,4 +65,25 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 //  @Modifying(clearAutomatically = true) // 쿼리 실행 후 영속성 컨텍스트 자동 초기화
   @Query("update Member m set m.age = m.age+1 where m.age >= :age")
   int bulkAgePlus(@Param("age") int age);
+  
+  
+  
+  // N+1 문제 해결
+  // JPQL 페치 조인
+  @Query("select m from Member m left join fetch m.team")
+  List<Member> findMemberFetchJoin();
+  
+  // EntityGraph
+  @Override
+  @EntityGraph(attributePaths = {"team"})
+  List<Member> findAll();
+  
+  //JPQL + 엔티티 그래프
+  @Query("select m from Member m")
+  @EntityGraph(attributePaths = {"team"})
+  List<Member> findMemberEntityGraph();
+  
+  //메서드 이름 쿼리
+  @EntityGraph(attributePaths = {"team"})
+  List<Member> findEntityGraphByAge(int age);
 }
