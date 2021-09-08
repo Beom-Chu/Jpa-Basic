@@ -2,14 +2,18 @@ package com.kbs.datajpa.repository;
 
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import com.kbs.datajpa.dto.MemberDto;
 import com.kbs.datajpa.entity.Member;
@@ -59,31 +63,42 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
   Page<Member> findByAge(int age, Pageable pageable);
 
 
-  
+
   // 벌크성 수정 쿼리
   @Modifying // @Modifying 수정,삭제 쿼리에 필수
-//  @Modifying(clearAutomatically = true) // 쿼리 실행 후 영속성 컨텍스트 자동 초기화
+  // @Modifying(clearAutomatically = true) // 쿼리 실행 후 영속성 컨텍스트 자동 초기화
   @Query("update Member m set m.age = m.age+1 where m.age >= :age")
   int bulkAgePlus(@Param("age") int age);
-  
-  
-  
+
+
+
   // N+1 문제 해결
   // JPQL 페치 조인
   @Query("select m from Member m left join fetch m.team")
   List<Member> findMemberFetchJoin();
-  
+
   // EntityGraph
   @Override
   @EntityGraph(attributePaths = {"team"})
   List<Member> findAll();
-  
-  //JPQL + 엔티티 그래프
+
+  // JPQL + 엔티티 그래프
   @Query("select m from Member m")
   @EntityGraph(attributePaths = {"team"})
   List<Member> findMemberEntityGraph();
-  
-  //메서드 이름 쿼리
+
+  // 메서드 이름 쿼리
   @EntityGraph(attributePaths = {"team"})
   List<Member> findEntityGraphByAge(int age);
+
+
+
+  // 쿼리 힌트 사용
+  // 조회용도로만 사용, 데티체크 미발생
+  @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+  Member findReadOnlyByUserName(String userName);
+  
+  // Lock : 조회 블럭에 Lock을 검 (for update)
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  List<Member> findHintLockByUserName(String name);
 }
