@@ -20,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "userName", "age"})
 @NamedQuery(name = "Member.findByUserName", query = "select m from Member m where m.userName = :userName") //실무에서 미사용
-public class Member {
+public class Member extends BaseEntity {
 
   @Id
   @GeneratedValue
