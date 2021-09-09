@@ -239,4 +239,19 @@ class MemberRepositoryTest {
     //then
     assertThat(resultCount).isEqualTo(3);
   }
+  
+  @Test
+  public void CustomRepositoryTest() {
+    
+    //given
+    memberRepository.save(new Member("member1", 10));
+    memberRepository.save(new Member("member2", 10));
+    memberRepository.save(new Member("member3", 10));
+    
+    //when
+    List<Member> findMemberCustom = memberRepository.findMemberCustom();
+    
+    //then
+    assertThat(findMemberCustom.size()).isEqualTo(3);
+  }
 }
