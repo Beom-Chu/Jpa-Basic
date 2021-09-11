@@ -67,5 +67,8 @@ class AuditingTest {
     //then
     System.out.println("[[[findMember.CreatedDate : "+findMember.getCreatedDate());
     System.out.println("[[[findMember.LastModifiedDate : "+findMember.getLastModifiedDate());
+    System.out.println("[[[findMember.CreateBy : "+findMember.getCreateBy());
+    System.out.println("[[[findMember.LastModifiedBy : "+findMember.getLastModifiedBy());
+
   }
 }
