@@ -108,4 +108,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
   //엔티티 대신에 DTO를 편리하게 조회할 때 사용
   //전체 엔티티가 아니라 만약 회원 이름만 딱 조회하고 싶으면?
   List<UserNameOnly> findProjectionsByUserName(String userName);
+  
+  
+  //JPQL Grouping + Projection
+  @Query("select m.team.name as name, count(m) as count from Member m group by m.team")
+  List<MemberGrouping> findGrouping();
 }
