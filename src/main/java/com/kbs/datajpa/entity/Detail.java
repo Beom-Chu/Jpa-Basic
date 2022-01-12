@@ -2,26 +2,24 @@ package com.kbs.datajpa.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "header_id", scope = Header.class)
 public class Detail {
 
     @Id @GeneratedValue
-    @Column(name = "detail_id")
+    @Column(name = "detailId")
     private Long id;
     private String name;
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "header_id")
+    @JoinColumn(name = "headerId")
     private Header header;
 
     public Detail(String name, String type, Header header) {

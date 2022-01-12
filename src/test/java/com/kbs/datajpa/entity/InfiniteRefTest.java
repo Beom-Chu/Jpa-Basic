@@ -1,20 +1,22 @@
-package com.kbs.datajpa.controller;
+package com.kbs.datajpa.entity;
 
-import com.kbs.datajpa.entity.Detail;
-import com.kbs.datajpa.entity.Header;
 import com.kbs.datajpa.repository.DetailRepository;
 import com.kbs.datajpa.repository.HeaderRepository;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-@RestController
-public class InfiniteReferenceController {
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@Transactional
+class InfiniteRefTest {
 
     @Autowired
     private HeaderRepository headerRepository;
@@ -25,30 +27,26 @@ public class InfiniteReferenceController {
     @PersistenceContext
     private EntityManager em;
 
-    @PostConstruct
-    public void setData() {
-
+    @BeforeEach
+    public void before(){
         Header header1 = headerRepository.save(new Header("header1", 10));
         Header header2 = headerRepository.save(new Header("header2", 20));
 
         Detail detail1 = detailRepository.save(new Detail("detName1", "type1", header1));
         Detail detail2 = detailRepository.save(new Detail("detName2","type2",header1));
         Detail detail3 = detailRepository.save(new Detail("detName3","type3",header2));
-
-//        detail1.setHeader(header1);
-//        detail2.setHeader(header1);
-//        detail3.setHeader(header2);
-
     }
 
-    @GetMapping("/infinite-ref")
-    public Header getHeader() {
+    @Test
+    public void test(){
+        System.out.println("InfiniteRefTest.test");
 
         Header header = headerRepository.findById(1L).get();
+
+        System.out.println("[[[size " + header.getDetail().size());
 
         System.out.println("[[[header = " + header);
         System.out.println("[[[detail = " + header.getDetail());
 
-        return header;
     }
 }
