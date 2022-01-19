@@ -1,4 +1,4 @@
-package com.kbs.datajpa;
+package com.kbs.datajpa.etc;
 
 
 import org.junit.jupiter.api.BeforeEach;
