@@ -5,6 +5,8 @@ import com.kbs.datajpa.entity.Header;
 import com.kbs.datajpa.repository.DetailRepository;
 import com.kbs.datajpa.repository.HeaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,13 +44,15 @@ public class InfiniteReferenceController {
     }
 
     @GetMapping("/infinite-ref")
-    public Header getHeader() {
+    public ResponseEntity<Header> getHeader() {
+        System.out.println("[[[[InfiniteReferenceController.getHeader");
 
         Header header = headerRepository.findById(1L).get();
 
         System.out.println("[[[header = " + header);
         System.out.println("[[[detail = " + header.getDetail());
 
-        return header;
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(header);
+        return ResponseEntity.ok(header);
     }
 }
