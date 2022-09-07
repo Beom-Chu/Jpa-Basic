@@ -1,6 +1,8 @@
 package com.kbs.datajpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -253,5 +255,30 @@ class MemberRepositoryTest {
     
     //then
     assertThat(findMemberCustom.size()).isEqualTo(3);
+  }
+
+
+  @Test
+  public void deleteTest() {
+    //given
+    memberRepository.save(new Member("member1", 10));
+    memberRepository.save(new Member("member2", 10));
+
+//    List<Member> all = memberRepository.findAll();
+//    System.out.println("[[[all = " + all);
+
+    Member member3 = memberRepository.findOneByUserName("member3");
+
+    System.out.println("[[[member3 = " + member3);
+
+    memberRepository.delete(member3);
+
+//    List<Member> list = new ArrayList<>();
+//    list.add(all.get(0));
+//
+//    memberRepository.deleteAll(list);
+//
+//    List<Member> all2 = memberRepository.findAll();
+//    System.out.println("[[[all2 = " + all2);
   }
 }
